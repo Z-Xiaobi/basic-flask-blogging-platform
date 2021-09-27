@@ -27,4 +27,5 @@ run.py
 test.db
 ```
 
-
+## Functionalities
+Writing posts and comments are provided as basic functions. User group are divided into three main groups: normal users, moderators and administrators. Users are able to login and register, post their questions, share personal experience, or comment on the posts they like. Besides, functions of follow or unfollow someone, reset password, edit or delete posts, read all posts or authors, and edit profile, such as uploading new profile picture are applied in coursework website. For moderators, there is an additional function for comment managing which means moderators has the authority to delete, enable or disable a comment. This function is used to prevent users from violent or pornographic information, and terrorist messages. Administrators can set a moderator, manage data in administrator system, and can achieve all the functions above.
