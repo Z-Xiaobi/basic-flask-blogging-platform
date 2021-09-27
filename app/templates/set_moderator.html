@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h1>Set moderator</h1>
+
+        <form class="margin-bottom-0" action="{{ action }}" method="post" id="{{ formid }}">
+            <!--csrf protection-->
+            {{ form.hidden_tag() }}
+
+
+            <div class="form-group m-b-20">
+                {{ form.email(class='form-control input-lg',placeholder = "email") }}
+            </div>
+            {% for error in form.email.errors %}
+            <span class="formerror">[{{ error }}]</span>
+            {% endfor %}<br>
+
+
+            <button type="submit" class="btn btn-default" >Submit</button>
+
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}

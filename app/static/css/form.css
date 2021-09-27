@@ -1,0 +1,20 @@
+h3{
+    text-align: center;
+    padding-top: 10px;
+}
+
+.form{
+    width: 370px;
+    margin: 0 auto;
+}
+
+form.form > div{
+    padding: 8px;
+}
+div.avatar-input-form{
+align:center;
+
+}
+.profile-input-form{
+align:center;
+}

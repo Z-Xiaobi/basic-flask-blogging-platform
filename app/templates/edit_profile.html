@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div >
+
+    <div class="panel panel-default">
+        <h3>Edit Your Profile</h3>
+    <div class="panel-body">
+    <form class="profile-input-form" action="" method="post" name="create">
+        {{ form.hidden_tag() }}
+
+        {% if current_user.real_avatar %}
+        <img class="img-rounded edit-thumbnail" src="{{current_user.real_avatar}}">
+        {% else %}
+        <img class="img-rounded edit-thumbnail" src="{{current_user.gravatar(size=100)}}">
+        {% endif %}
+
+        <div class="input-group input-group-lg">
+          Your Location<br>
+            {{ form.location(class_='form-control') }}<br>
+        </div>
+            {% for error in form.location.errors %}
+            <span class="formerror">[{{ error }}]</span>
+            {% endfor %}<br>
+        <a class="btn btn-primary" href="{{url_for('.edit_profile_pic')}}">Change profile picture</a>
+
+
+        <br><br>
+
+        <div class="login-buttons">{{ form.submit() }}</div>
+
+
+        </form>
+    </div>
+    </div>
+</div>
+{% endblock %}

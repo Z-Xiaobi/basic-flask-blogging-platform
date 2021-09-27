@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{{ moment.include_moment() }}　
+
+
+{% block title %}
+{% for post in posts %}
+{{ title }}-{{ post.title }}
+{% endfor %}
+{% endblock %}
+
+
+{% block content %}
+<div class="panel panel-default">
+    {% for post in posts %}
+    <div class="panel-body">
+        <div class="post-content-single">
+            <div class="post-title-single"><h2>{{post.title}}</h2></div>
+
+            <div class="post-author-single">author: <a href="{{ url_for('.user', username=post.author.username) }}">
+                {{ post.author.username }}</a>  </div>
+            <div class="post-date-single">{{ moment(post.create_time).fromNow()}}</div>
+            {{ post.comments.count() }} comments
+            <hr>
+            <div class="post-body-single">
+                {% if post.body_html %}
+                    {{ post.body_html | safe }}
+                {% else %}
+                    {{ post.body }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="panel panel-default">
+    <div class="panel-body">
+
+        {% if current_user.is_authenticated %}
+            <form class="margin-bottom-0" action="{{ action }}" method="post" id="{{ formid }}">
+                  <!--csrf protection-->
+                  {{ form.hidden_tag() }}
+                <div class="comment-form">
+                    {{ form.body(class_='form-control',placeholder = "Something to comment on ?") }}
+                </div>
+                {% for error in form.body.errors %}
+                    <span class="formerror">[{{ error }}]</span>
+                {% endfor %}<br>
+
+                <button type="submit" class="btn btn-default" >Submit</button>
+            </form>
+        {% else %}
+        <!--fake submission form-->
+            <div class="comment-form">
+                {{ form.body(class_='form-control',placeholder = "Something to comment on ?") }}
+            </div>
+            {% for error in form.body.errors %}
+                <span class="formerror">[{{ error }}]</span>
+            {% endfor %}<br>
+
+            <button type="submit" class="btn btn-default" >Submit</button>
+            <br><br>
+                Anoymous user can not comment on posts, please
+                <a href="{{url_for('login')}}">
+                    Login
+                </a>
+
+
+         first
+        {% endif %}
+
+         <hr>
+        <div class="post-title-single">
+            <h2>Comments({% for post in posts %}{{ post.comments.count() }}{% endfor %})</h2>
+        </div>
+        {% include '_comments.html' %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block rightblock %}
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="jumbotron">
+            <h4>The input box supports MarkDown</h4>
+
+             <a href="https://daringfireball.net/projects/markdown/syntax">
+                 read systax here
+             </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

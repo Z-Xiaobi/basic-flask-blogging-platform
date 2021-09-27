@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h1>Login</h1>
+        <p>
+            New User?
+            <a href="{{url_for('register')}}">
+                Click here to register
+            </a>
+        </p>
+
+            <div class="login-content">
+
+              <form class="margin-bottom-0" action="{{ action }}" method="post" id="{{ formid }}">
+                  <!--csrf protection-->
+                  {{ form.hidden_tag() }}
+
+
+                  <div class="form-group m-b-20">
+                      {{ form.email(class='form-control input-lg',placeholder = "email") }}
+                  </div>
+                  {% for error in form.email.errors %}
+                  <span class="formerror">[{{ error }}]</span>
+                  {% endfor %}<br>
+
+                  <div class="form-group m-b-20">
+                    {{ form.password(class='form-control input-lg',placeholder = "password") }}
+                  </div>
+                  {% for error in form.password.errors %}
+                  <span class="formerror">[{{ error }}]</span>
+                  {% endfor %}<br>
+
+                  <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+
+
+                  <!-- <div class="login-buttons">-->
+                      <!-- {{ form.submit() }}-->
+                  <!-- </div> -->
+                  <button type="submit" class="btn btn-default" >Login</button>
+
+              </form>
+             </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block rightblock %}
+<!--<div class="panel panel-default">-->
+    <!--<div class="panel-body">-->
+    <!--</div>-->
+<!--</div>-->
+<div class="jumbotron">
+    <h2>
+        A brief login guidance
+    </h2>
+    <p>
+        Put your registered email into "email" input box.
+    </p>
+    <p>
+        Put your registered password into "password" input box.
+    </p>
+    <p>
+        The choice "Keep me logged in" remember your account for five hours.
+    </p>
+    <p>
+        Click button "login", the system will check your account.
+        A success login operation will open the previous webpage you have visited.
+    </p>
+
+</div>
+{% endblock %}

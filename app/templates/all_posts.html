@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% import "_pagination_macros.html" as macros%}
+
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-body">
+    {% include '_posts.html' %}
+
+    {% if pagination %}
+    <div class="pagination">
+        {{ macros.pagination_widget(pagination, '.all_posts')}}
+    </div>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

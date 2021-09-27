@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div >
+
+    <h3>Edit Your Profile</h3>
+
+    <form class="avatar-input-form" action="" method="post" name="create" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        {% if current_user.real_avatar %}
+        <img class="img-rounded edit-thumbnail" src="{{current_user.real_avatar}}">
+        {% else %}
+        <img class="img-rounded edit-thumbnail" src="{{current_user.gravatar(size=100)}}">
+        {% endif %}
+
+
+     <input name="avatar_upload" type="file" class="file" data-show-preview="true"/>
+    <!--{{ form.avatar(class="change",placeholder="upload icon",onchange="c()") }}-->
+        <br>
+
+</form>
+
+</div>
+{% endblock %}

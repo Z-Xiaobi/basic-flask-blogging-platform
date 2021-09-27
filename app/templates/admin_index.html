@@ -1,0 +1,45 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h2>Welcome to backstage management system.</h2>
+        <hr>
+        <div class="alert alert-info alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert"
+                    aria-hidden="true">
+                &times;
+            </button>
+            You are now in adminstrator backstage!
+            Please pay attetion to delete operation.
+            You will not undo the delete operation for you operated data on database directly.
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <!--<a class="btn btn-primary" href="{{url_for('.back')}}">Back</a>-->
+                <a class="btn btn-default" href="{{url_for('.admin_logout')}}">Logout</a>
+            </div>
+        </div>
+        <div class="jumbotron">
+    <h2>
+        A brief guidance
+    </h2>
+    <p>
+        You can operate data for each model in dropdown menu 'Models'.
+    </p>
+    <p>
+        You can read, add, delete data from database directly.
+    </p>
+    <p>
+        The choice "Back" will bring you to the home page of FlipForum.
+    </p>
+    <p>
+        The choice "Logout" will log you out directly.
+    </p>
+    <p>
+        For Roles, Role 'User' is id 1, Role 'Administrator' is id 2, Role Moderator is id 3.
+    </p>
+</div>
+    </div>
+</div>
+{% endblock %}

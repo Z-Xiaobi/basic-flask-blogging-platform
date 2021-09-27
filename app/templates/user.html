@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% import "_pagination_macros.html" as macros%}
+
+{{ moment.include_moment() }}　
+
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-body">
+
+            <div class="page-header">
+
+                    {% if user.real_avatar %}
+                    <img class="img-rounded profile-thumbnail" src="{{user.real_avatar}}" width="256">
+                    {% else %}
+                    <img class="img-rounded profile-thumbnail" src="{{user.gravatar(size=256)}}">
+                    {% endif %}
+
+                    <div class="profile-header">
+                        <h1>{{user.username}}</h1>
+                        {% if user.name or user.location %}
+                        <p>
+                            {% if user.name %}{{user.name}}{% endif %}
+                            {% if user.location %}
+                            From <a href="http://maps.baidu.com/?q={{user.location}}">{{user.location}}</a>
+                            {% endif %}
+                        </p>
+                        {% endif %}
+
+                        <p>
+                            Member created since {{moment(user.member_since).format('L')}}.
+                            <!--Member since {{user.member_since}}.-->
+                        </p>
+                        <p>
+                            Last seen {{moment(user.last_seen).fromNow()}}
+                            <!--Last seen {{user.last_seen}}-->
+                        </p>
+                        <p>
+                            {% if not current_user.is_following(user) and not current_user.id == user.id%}
+                            <a href="{{ url_for('.follow', username=user.username) }}" class="btn btn-primary">Follow</a>
+                            {% elif current_user.is_following(user) and not current_user.id == user.id%}
+                            <a href="{{ url_for('.unfollow', username=user.username) }}" class="btn btn-default">Unfollow</a>
+
+
+                            {% endif %}
+                            <a href="{{ url_for('.follower', username=user.username) }}">
+                                Followers: <span class="badge">{{ user.follower.count()}}</span></a>
+                            <a href="{{ url_for('.followed_by', username=user.username) }}">
+                                Following: <span class="badge">{{ user.followed.count()}}</span></a>
+                            {% if current_user.is_authenticated and user != current_user and user.is_following(current_user) %}
+                            | <span class="label label-default">Follows you</span>
+                            {% endif %}
+                        </p>
+
+
+                    </div>
+
+            </div>
+
+
+    </div>
+</div>
+
+<div class="panel panel-default">
+        {% if user==current_user %}
+        <div class="panel-body">
+
+            <a class="btn btn-primary" href="{{url_for('.create_post')}}">Create a Post</a>
+            <a class="btn btn-primary" href="{{url_for('.edit_profile')}}">Edit Profile</a>
+            <a class="btn btn-primary" href="{{url_for('.reset_password')}}">Reset Password</a>
+
+        </div>
+        {% endif %}
+</div>
+    <ul class="nav nav-list"><li class="divider"></li></ul>
+<div class="panel panel-default">
+
+        <div class="panel-body">
+
+            <ul class="posts">
+                <h4>History Posts</h4>
+
+                <ul class="posts">
+                    {% for post in posts %}
+                    <li class="post">
+                        <div class="post-thumbnail">
+                            <a href="{{ url_for('.user', username=post.author.username) }}">
+                                {% if user.real_avatar %}
+                                <img class="img-rounded profile-thumbnail" src="{{post.author.real_avatar}}" width="40">
+                                {% else %}
+                                <img class="img-rounded profile-thumbnail" src="{{ post.author.gravatar(size=40) }}">
+                                {% endif %}
+                            </a>
+                        </div>
+                        <div class="post-content">
+                            <div class="post-date">{{ moment(post.create_time).fromNow() }}</div>
+                            <div class="post-author"><a href="{{ url_for('.user', username=post.author.username) }}">{{ post.author.username }}</a></div>
+                            <div class="post-title"><a href="{{ url_for('.post', id=post.id) }}">{{post.title}}</a></div>
+                            <div class="post-body">
+                                {% if post.body_html %}
+                                    {{ post.body_html | safe }}
+                                {% else %}
+                                    {{ post.body }}
+                                {% endif %}
+                            </div>
+                            <div class="post-footer">
+
+                                {% if current_user == post.author %}
+                                <a href="{{ url_for('.edit_post', id=post.id) }}">
+                                    <span class="label label-primary">Edit</span>
+                                </a>
+                                <a href="{{ url_for('.delete_post', id=post.id) }}">
+                                    <span class="label label-primary">Delete</span>
+                                </a>
+                                {% endif %}
+                                <a href="{{ url_for('.post', id=post.id) }}">
+                                    <span class="label label-default">Permalink</span>
+                                </a>
+                                <a href="{{ url_for('.post', id=post.id) }}#comments">
+                                    <span class="label label-primary">{{ post.comments.count() }} Comments</span>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+
+
+                    {% if pagination %}
+                      <div class="pagination">
+                      {{ macros.pagination_widget(pagination, '.user', username = user.username )}}
+                      </div>
+                      {% endif %}
+
+                </ul>
+
+            </ul>
+        </div>
+
+</div>
+
+
+
+{% endblock %}
+
+{% block rightblock %}
+<div class="panel panel-default">
+    <div class="panel-body">
+
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="jumbotron">
+            <h4>Recommended Authors</h4>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="jumbotron">
+            <h4>Recommended News</h4>
+        </div>
+    </div>
+</div>
+{% endblock %}
+<a href="{{ url_for('.follower', username=user.username) }}">

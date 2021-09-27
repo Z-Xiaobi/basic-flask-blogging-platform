@@ -1,0 +1,258 @@
+<html>
+  <head>
+      <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+      <!--jquery for nav bar-->
+      <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+      <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/locale/af.js"></script>
+
+      <script src="https://cdn.staticfile.org/jquery/2.1.1/offcanvas.js"></script>
+      <link rel="stylesheet" href="/static/css/base.css">
+      <link rel="stylesheet" href="/static/css/form.css">
+      <link rel="stylesheet" href="/static/css/liststyle.css">
+
+      <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-fileinput/4.4.6/css/fileinput.min.css"/>
+      <script src="https://cdn.bootcss.com/bootstrap-fileinput/4.4.6/js/fileinput.min.js"></script>
+
+      <!--jquery for left side bar-->
+      <script src="https://cdn.bootcss.com/jquery/3.2.0/jquery.min.js"></script>
+      <!-- Include the Sidr JS -->
+      <script src="https://cdn.bootcss.com/sidr/2.2.1/jquery.sidr.min.js"></script>
+      <script src="https://cdn.bootcss.com/jquery.touchswipe/1.6.19/jquery.touchSwipe.min.js"></script>
+
+      <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <!-- Include a Sidr bundled CSS theme -->
+      <link href="https://cdn.bootcss.com/sidr/2.2.1/stylesheets/jquery.sidr.dark.min.css" rel="stylesheet">
+
+
+      <!--cookie-->
+      <link href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" rel="stylesheet" type="text/css">
+
+      {% if title %}
+      <title>Flip Forum - {{ title }}</title>
+      {% else %}
+      <title>Flip Forum</title>
+      {% endif %}
+
+      {{ moment.include_moment() }}
+
+  </head>
+  <body >
+
+    <div class="navigationbar" id="top-place">
+
+        <!--navgation bar-->
+        <nav class="navbar navbar-inverse" role="navigation">
+            <a id="simple-menu" href="#sidr">
+                <button class="btn btn-lg btn-leftmenu">
+                    <span class="glyphicon glyphicon-th-list"></span>
+                </button>
+            </a>
+            <!--leftside-->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">
+                    <!--screen reader-->
+                    <span class="sr-only">FlipForum</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">FlipForum</a>
+            </div>
+            <div class="collapse navbar-collapse" id="menu">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="{{url_for('index')}}">Homepage</a></li>
+                    <!--<li><a href="#">Community</a></li>-->
+                    <!--<li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documents <b class="caret"></b></a>-->
+                        <!--<ul class="dropdown-menu">-->
+                            <!--<li><a href="#">About FlipForum</a></li>-->
+                            <!--<li class="divider"></li>-->
+                        <!--</ul>-->
+                    <!--</li>-->
+                </ul>
+                <!--rightside-->
+
+
+                <ul class="nav navbar-nav navbar-right">
+
+                    <!--if user has been authenticated, the navigation bar will use logout-->
+                    {% if current_user.is_authenticated %}
+                    <li><a href="{{url_for('logout')}}">Log out</a></li>
+                    <li><a href="{{ url_for('user', username=current_user.username) }}">User Center</a></li>
+                    {% else %}
+                    <li><a href="{{url_for('login')}}">Log in</a></li>
+                    <li><a href="{{url_for('register')}}">Sign up</a></li>
+                    {% endif %}
+
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                          Links<span class="caret"></span></a>
+                      <ul class="dropdown-menu">
+
+                        <li><a href="http://flask.pocoo.org" target="_blank">Flask website</a></li>
+                        <li><a href="https://www.python.org/">Python website</a></li>
+                        <li><a href="http://getbootstrap.com">Bootstrap website</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="https://www.baidu.com" target="_blank">baidu</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="https://www.google.com.hk" target="_blank">Google Search</a></li>
+                      </ul>
+                    </li>
+                </ul>
+                <!--search bar-->
+
+                <form action="{{url_for('search')}}" class="navbar-right navbar-form" method="post">
+                    <!--After adding these two styles,
+                    the magnifier represented by the span can be placed in the search bar.-->
+                    <div class="form-group has-feedback">
+                        <input type="text" class="form-control" placeholder="Search Posts..." name="search" >
+                        <button type="submit" class="btn btn-default">Search</button>
+                        <!--<button class="glyphicon glyphicon-search  form-control-feedback" type="submit"></button>-->
+                    </div>
+                </form>
+
+            </div>
+
+        </nav>
+  </div>
+
+    <div class="body-container">
+
+    </div>
+
+
+  <div class="container-fluid" >
+
+
+      <div class="row">
+
+          <div class="col-md-9">
+
+              <div class="alert alert-info">
+                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  <strong>
+                      This website uses cookies so that we can find out your locations or other information
+                      you input and stalk you.
+                  </strong>
+              </div>
+              {% with messages = get_flashed_messages(category_filter=['err']) %}
+              {% if messages %}
+              {% for message in messages %}
+              <div class="alert alert-warning">
+                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  <strong>Error!</strong> {{ message }}
+              </div>
+              {% endfor %}
+              {% endif %}
+              {% endwith %}
+
+              {% with messages = get_flashed_messages(category_filter=['ok']) %}
+              {% if messages %}
+              {% for message in messages %}
+              <div class="alert alert-success">
+                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  <strong>Success!</strong> {{ message }}
+              </div>
+              {% endfor %}
+              {% endif %}
+              {% endwith %}
+
+              {% with messages = get_flashed_messages(category_filter=['warning']) %}
+              {% if messages %}
+              {% for message in messages %}
+              <div class="alert alert-warning">
+                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  <strong>Warning: </strong> {{ message }}
+              </div>
+              {% endfor %}
+              {% endif %}
+              {% endwith %}
+
+              <!--block content-->
+              {% block content %}{% endblock %}
+          </div>
+          <div class="col-md-3">{% block rightblock %}{% endblock %}</div>
+      </div>
+  </div>
+    <script src="/static/base.js"></script>
+    <!--fixed postion buttons-->
+    <!--put here to avoid to be blocked by contents-->
+    <a href="#top-place" class="back-to-top-place" id="top-place-button">
+        <img src="/static/img/blue.png" height="40" width="40">
+    </a>
+
+
+
+    <div id="sidr">
+
+      <ul>
+          <li>
+              {% if current_user.is_authenticated %}
+              <a href="{{ url_for('.user', username=current_user.username) }}">
+                  {% if current_user.real_avatar %}
+                  <img class="img-thumbnail left-menu-thumbnail" src="{{current_user.real_avatar}}" width="121">
+                  {% else %}
+                  <img class="img-thumbnail left-menu-thumbnail" src="{{current_user.gravatar(size=121)}}">
+                  {% endif %}
+              </a>
+              <a href="{{ url_for('.user', username=current_user.username) }}" class="menu_username">
+                <div class="user-name-center">{{current_user.username}}</div>
+              </a>
+              {% else %}
+               <img class="img-thumbnail left-menu-thumbnail" src="/static/img/water-lily.jpg" width="121">
+              <a href="{{ url_for('.login') }}" class="menu_username">
+                <div class="user-name-center">Come and Join us!</div>
+              </a>
+              {% endif %}
+          </li>
+
+          <ul class="nav nav-list"><li class="divider"></li></ul>
+
+          <li><a href="{{url_for('.all_posts')}}">Posts</a></li>
+          <!--<li class="active"><a href="all_author">Authors</a></li>-->
+          <li><a href="{{url_for('.all_author')}}">Authors</a></li>
+          <!-- for administrator  only-->
+          {% if current_user.is_authenticated %}
+          {% if current_user.can(Permission.ADMIN) %}
+          <li><a href="{{url_for('.for_admin_only')}}">Admin Home</a></li>
+          <li><a href="{{url_for('.set_moderator')}}">Set Moderator</a></li>
+          {% endif %}
+          {% endif %}
+
+
+          {% if current_user.is_authenticated %}
+              {% if current_user.can(Permission.MODERATE) %}
+                <li><a href="{{ url_for('.all_comments') }}">Manage Comments</a></li>
+                <!--<li><a href="{{ url_for('.moderate') }}">Moderate Comments</a></li>-->
+              {% endif %}
+          {% endif %}
+
+      </ul>
+    </div>
+    <script src="/static/js/base.js"></script>
+    <!--<script>-->
+    <!--&lt;!&ndash;$(document).ready(function() {&ndash;&gt;-->
+      <!--&lt;!&ndash;$('#simple-menu').sidr();&ndash;&gt;-->
+    <!--&lt;!&ndash;});&ndash;&gt;-->
+    <!--&lt;!&ndash;$('sdir').swipe( {&ndash;&gt;-->
+        <!--&lt;!&ndash;//Single swipe handler for left swipes&ndash;&gt;-->
+        <!--&lt;!&ndash;swipeLeft: function () {&ndash;&gt;-->
+            <!--&lt;!&ndash;$.sidr('close', 'sidr-main');&ndash;&gt;-->
+        <!--&lt;!&ndash;},&ndash;&gt;-->
+        <!--&lt;!&ndash;swipeRight: function () {&ndash;&gt;-->
+            <!--&lt;!&ndash;$.sidr('open', 'sidr-main');&ndash;&gt;-->
+        <!--&lt;!&ndash;},&ndash;&gt;-->
+        <!--&lt;!&ndash;//Default is 75px, set to 0 for demo so any distance triggers swipe&ndash;&gt;-->
+        <!--&lt;!&ndash;threshold: 45&ndash;&gt;-->
+    <!--&lt;!&ndash;});&ndash;&gt;-->
+        <!--&lt;!&ndash;window.onscroll = function () {&ndash;&gt;-->
+        <!--&lt;!&ndash;if (document.documentElement.scrollTop + document.body.scrollTop > 100) {&ndash;&gt;-->
+            <!--&lt;!&ndash;document.getElementById("top-place-button").style.display = "block";&ndash;&gt;-->
+        <!--&lt;!&ndash;}&ndash;&gt;-->
+        <!--&lt;!&ndash;else {&ndash;&gt;-->
+            <!--&lt;!&ndash;document.getElementById("top-place-button").style.display = "none";&ndash;&gt;-->
+        <!--&lt;!&ndash;}&ndash;&gt;-->
+    <!--&lt;!&ndash;}&ndash;&gt;-->
+    <!--</script>-->
+  </body>
+</html>

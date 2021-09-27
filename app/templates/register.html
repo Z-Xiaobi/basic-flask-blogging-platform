@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="panel panel-default">
+    <div class="panel-body">
+    <h3>Register</h3>
+
+
+    <form class="form" action="" method="post" name="create">
+        {{ form.hidden_tag() }}
+        <div class="input-group input-group-lg">
+          <span class="input-group-addon" >Username</span>
+            {{ form.username(class_='form-control',placeholder = "at least 6 element") }}<br>
+
+        </div>
+            {% for error in form.username.errors %}
+            <span class="formerror">[{{ error }}]</span>
+            {% endfor %}<br>
+        <div class="input-group input-group-lg">
+          <span class="input-group-addon" >Email</span>
+            {{ form.email(class_='form-control',placeholder = "input your email") }}<br>
+
+        </div>
+            {% for error in form.email.errors %}
+            <span class="formerror">[{{ error }}]</span>
+            {% endfor %}<br>
+        <div class="input-group input-group-lg">
+          <span class="input-group-addon" >Password</span>
+            {{ form.password(class_='form-control',placeholder = "at least 6 element") }}<br>
+
+        </div>
+            {% for error in form.password.errors %}
+            <span class="formerror">[{{ error }}]</span>
+            {% endfor %}<br>
+        <div class="input-group input-group-lg">
+          <span class="input-group-addon" >Password</span>
+            {{ form.password_confirm(class_='form-control',placeholder = "input password again") }}<br>
+        </div>
+            {% for error in form.password_confirm.errors %}
+            <span class="formerror">[{{ error }}]</span>
+            {% endfor %}<br>
+        <button type="submit" class="btn btn-default" >Register</button>
+    </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block rightblock %}
+<!--<div class="panel panel-default">-->
+    <!--<div class="panel-body">-->
+    <!--</div>-->
+<!--</div>-->
+<div class="jumbotron">
+    <h2>
+        A brief register guidance
+    </h2>
+    <p>
+        Set your username with at least 6 elements.
+    </p>
+    <p>
+        Set your email address.
+    </p>
+    <p>
+        The first password is your personal password with at least 6 element.<br>
+        The password should have a 'uppercase letter', a 'lowercase letter', a 'number',
+        and a special character.
+    </p>
+    <p>
+        The second password is used to ensure the first password is what you want to set, avoid wrong input.
+    </p>
+    <p>
+        Click button "submit", the system will check your input information.
+        A success register operation will open the login page.
+    </p>
+
+</div>
+{% endblock %}

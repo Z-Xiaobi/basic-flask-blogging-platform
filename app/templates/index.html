@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% import "_pagination_macros.html" as macros%}
+
+{% block scripts %}
+{{ super() }}
+{{ moment.include_moment(local_js="https://cdn.bootcss.com/moment.js/2.22.1/moment.min.js") }}
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="panel panel-default" id = "index-center-panel">
+    <div class="panel-body" id = "index-center-panel-body">
+        <h1>Hello,
+        {% if current_user.is_authenticated %}
+            {{current_user.username}}
+        {% else %}
+            Stranger
+        {% endif %}!
+        </h1>
+        <hr>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Recent New Posts
+            </div>
+
+            <div class="panel-body">
+
+
+                <ul class="posts">
+                    {% for post in posts %}
+                    <li class="post">
+                        <div class="post-thumbnail">
+                            <a href="{{ url_for('.user', username=post.author.username) }}">
+                                {% if post.author.real_avatar %}
+                                <img class="img-rounded profile-thumbnail" src="{{post.author.real_avatar}}" width="40">
+                                {% else %}
+                                <img class="img-rounded profile-thumbnail" src="{{ post.author.gravatar(size=40) }}">
+                                {% endif %}
+                            </a>
+                        </div>
+                        <div class="post-content">
+                            <div class="post-date">{{ moment(post.create_time).fromNow() }}</div>
+                            <div class="post-author"><a href="{{ url_for('.user', username=post.author.username) }}">{{ post.author.username }}</a></div>
+                            <div class="post-title"><a href="{{ url_for('.post', id=post.id) }}">{{post.title}}</a></div>
+                            <div class="post-body">
+                                {% if post.body_html %}
+                                    {{ post.body_html | safe }}
+                                {% else %}
+                                    {{ post.body }}
+                                {% endif %}
+                            </div>
+                            <div class="post-footer">
+
+                                {% if current_user == post.author %}
+                                <a href="{{ url_for('.edit_post', id=post.id) }}">
+                                    <span class="label label-primary">Edit</span>
+                                </a>
+                                {% endif %}
+                                <a href="{{ url_for('.post', id=post.id) }}">
+                                    <span class="label label-default">Permalink</span>
+                                </a>
+                                <a href="{{ url_for('.post', id=post.id) }}#comments">
+                                    <span class="label label-primary">{{ post.comments.count() }} Comments</span>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block rightblock %}
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="jumbotron">
+            <h4>Recommended Posts</h4>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="jumbotron">
+            <h4>Recommended Authors</h4>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="jumbotron">
+            <h4>Recommended News</h4>
+        </div>
+    </div>
+</div>
+{% endblock %}

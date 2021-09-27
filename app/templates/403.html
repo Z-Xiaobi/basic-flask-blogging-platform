@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row" >
+ <div class="col-md-12">
+  <div class="col-md-6">
+  </div>
+  <div class="col-md-6">
+   <div class="panel panel-default">
+    <div class="panel-body">
+   <h1>403 error! Oh, this error means your requests are forbidden,
+       I'm afraid you do not has the permission to access this service.</h1>
+        <br>
+     <a class="btn btn-default" href="{{url_for('.index')}}">Back</a>
+    </div>
+    </div>
+   </div>
+  </div>
+ </div>
+</div>
+
+{% endblock %}
